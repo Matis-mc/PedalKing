@@ -11,7 +11,9 @@ public class RiderHandler {
         float speed = 4f;
         float delta = Gdx.graphics.getDeltaTime();
 
-
+        if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
+            speed = 8f;
+        }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             rider.getSprite().translateX(speed * delta);
         }

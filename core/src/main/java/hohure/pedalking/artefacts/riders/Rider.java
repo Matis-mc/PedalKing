@@ -32,4 +32,8 @@ public class Rider {
         riderTexture.dispose();
     }
 
+    public void moveForward(float speed){
+
+    }
+
 }

@@ -14,6 +14,8 @@ import hohure.pedalking.artefacts.riders.Rider;
 import hohure.pedalking.artefacts.riders.RiderHandler;
 import hohure.pedalking.screen.BackgroundMap;
 
+import static hohure.pedalking.utils.constant.ScreenConstant.BOTTOM_OFFSET;
+
 
 /** First screen of the application. Displayed after the application is created. */
 public class GameScreen implements Screen {
@@ -43,8 +45,8 @@ public class GameScreen implements Screen {
     public void show() {
         MapProperties props = backgroundMap.getTiledMap().getProperties();
         float mapCenterX = props.get("width", Integer.class) / 2f;
-        float mapCenterY = props.get("height", Integer.class) / 2f;
-        rider.getSprite().setCenter(mapCenterX, mapCenterY);
+        float mapBottomY = BOTTOM_OFFSET;
+        rider.getSprite().setCenter(mapCenterX, mapBottomY);
 
     }
 
