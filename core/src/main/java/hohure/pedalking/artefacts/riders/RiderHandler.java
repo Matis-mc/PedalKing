@@ -12,19 +12,19 @@ public class RiderHandler {
         float delta = Gdx.graphics.getDeltaTime();
 
         if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
-            speed = 8f;
+            speed = rider.sprint(speed);
         }
+
+        float distance = speed * delta;
+
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            rider.getSprite().translateX(speed * delta);
+            rider.getSprite().translateX(distance);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            rider.getSprite().translateX(-speed * delta);
+            rider.getSprite().translateX(-distance);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            rider.getSprite().translateY(speed * delta);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            rider.getSprite().translateY(-speed * delta);
+            rider.moveForward(distance);
         }
     }
 

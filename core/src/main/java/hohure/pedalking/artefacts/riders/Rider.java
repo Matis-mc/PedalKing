@@ -6,10 +6,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Rider {
 
-
     // rider
     private Texture riderTexture;
     private Sprite riderSprite;
+    private RiderData riderData;
 
     public Rider(){
 
@@ -18,6 +18,7 @@ public class Rider {
         float riderWitdh = (riderTexture.getWidth() / 32f) / 2;
         float riderHeight = (riderTexture.getHeight() / 32f) / 2;
         riderSprite.setSize(riderWitdh, riderHeight);
+        riderData = new RiderData(100, 100);
     }
 
     public Sprite getSprite(){
@@ -32,8 +33,19 @@ public class Rider {
         riderTexture.dispose();
     }
 
-    public void moveForward(float speed){
-
+    public void moveForward(float distance){
+        riderSprite.translateY(distance);
+    }
+    public void moveLeft(float distance){
+        riderSprite.translateX(distance);
+    }
+    public void moveRight(float distance){
+        riderSprite.translateX(distance);
+    }
+    public float sprint(float speed){
+        if(riderData.endurance <=0) return speed;
+        riderData.endurance -= 1;
+        return speed * 2;
     }
 
 }
