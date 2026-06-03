@@ -1,7 +1,6 @@
 package hohure.pedalking;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -11,7 +10,8 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import hohure.pedalking.artefacts.riders.Rider;
-import hohure.pedalking.artefacts.riders.RiderHandler;
+import hohure.pedalking.artefacts.riders.PlayerRiderHandler;
+import hohure.pedalking.artefacts.riders.RiderData;
 import hohure.pedalking.screen.BackgroundMap;
 
 import static hohure.pedalking.utils.constant.ScreenConstant.BOTTOM_OFFSET;
@@ -25,6 +25,7 @@ public class GameScreen implements Screen {
     SpriteBatch batch;
     BackgroundMap backgroundMap;
     Rider rider;
+    Rider opponent;
 
     // HUD
     // Caméra et viewport dédiés au HUD (texte, UI)
@@ -36,7 +37,8 @@ public class GameScreen implements Screen {
         backgroundMap = new BackgroundMap();
         hudViewport = new ScreenViewport();
         font = new BitmapFont();
-        rider = new Rider();
+        rider = new Rider(new RiderData(100, 100, "riders/rider.png"));
+        opponent = new Rider(new RiderData(100, 100, "riders/decathlon-rider.png"));
         setUpFont();
 
     }
@@ -47,6 +49,7 @@ public class GameScreen implements Screen {
         float mapCenterX = props.get("width", Integer.class) / 2f;
         float mapBottomY = BOTTOM_OFFSET;
         rider.getSprite().setCenter(mapCenterX, mapBottomY);
+        opponent.getSprite().setCenter(mapCenterX+2, mapBottomY);
 
     }
 
@@ -88,6 +91,7 @@ public class GameScreen implements Screen {
         font.dispose();
         tiledMap.dispose();
         rider.dispose();
+        opponent.dispose();
         backgroundMap.dispose();
     }
 
@@ -105,6 +109,7 @@ public class GameScreen implements Screen {
         batch.setProjectionMatrix(backgroundMap.getViewport().getCamera().combined);
         batch.begin();
         rider.draw(batch);
+        opponent.draw(batch);
         batch.end();
 
         // --- 2. Rendu du HUD (texte, UI) ---
@@ -117,7 +122,8 @@ public class GameScreen implements Screen {
     }
 
     private void input() {
-        RiderHandler.handle(rider);
+        PlayerRiderHandler.handle(rider);
+        PlayerRiderHandler.handleCollision(rider, opponent);
     }
 
 
