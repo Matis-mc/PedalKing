@@ -14,7 +14,9 @@ public class RiderData {
         this.endurance = endurance;
         this.power = power;
         this.texture = texture;
+        this.direction = Direction.UP;
     }
+
 
     public int getEndurance() {
         return endurance;

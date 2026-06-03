@@ -9,10 +9,16 @@ import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import hohure.pedalking.artefacts.race.matrice.Cell;
+import hohure.pedalking.artefacts.race.matrice.ZoneMatrice;
+import hohure.pedalking.artefacts.riders.OpponentRiderHandler;
 import hohure.pedalking.artefacts.riders.Rider;
 import hohure.pedalking.artefacts.riders.PlayerRiderHandler;
 import hohure.pedalking.artefacts.riders.RiderData;
 import hohure.pedalking.screen.BackgroundMap;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static hohure.pedalking.utils.constant.ScreenConstant.BOTTOM_OFFSET;
 
@@ -24,8 +30,8 @@ public class GameScreen implements Screen {
     BitmapFont font;
     SpriteBatch batch;
     BackgroundMap backgroundMap;
-    Rider rider;
-    Rider opponent;
+    Rider player;
+    List<Rider> opponents = new ArrayList<>();
 
     // HUD
     // Caméra et viewport dédiés au HUD (texte, UI)
@@ -37,8 +43,8 @@ public class GameScreen implements Screen {
         backgroundMap = new BackgroundMap();
         hudViewport = new ScreenViewport();
         font = new BitmapFont();
-        rider = new Rider(new RiderData(100, 100, "riders/rider.png"));
-        opponent = new Rider(new RiderData(100, 100, "riders/decathlon-rider.png"));
+        initPlayer();
+        initOpponent();
         setUpFont();
 
     }
@@ -48,8 +54,7 @@ public class GameScreen implements Screen {
         MapProperties props = backgroundMap.getTiledMap().getProperties();
         float mapCenterX = props.get("width", Integer.class) / 2f;
         float mapBottomY = BOTTOM_OFFSET;
-        rider.getSprite().setCenter(mapCenterX, mapBottomY);
-        opponent.getSprite().setCenter(mapCenterX+2, mapBottomY);
+        spawnRider();
 
     }
 
@@ -90,8 +95,8 @@ public class GameScreen implements Screen {
         // Destroy screen's assets here.
         font.dispose();
         tiledMap.dispose();
-        rider.dispose();
-        opponent.dispose();
+        player.dispose();
+        opponents.forEach(o -> o.dispose());
         backgroundMap.dispose();
     }
 
@@ -103,13 +108,13 @@ public class GameScreen implements Screen {
     public void draw(){
         // Draw your screen here. "delta" is the time since last render in seconds.
         ScreenUtils.clear(Color.BLACK);
-        backgroundMap.updateCameraOnSprite(rider.getSprite());
+        backgroundMap.updateCameraOnSprite(player.getSprite());
         backgroundMap.render();
 
         batch.setProjectionMatrix(backgroundMap.getViewport().getCamera().combined);
         batch.begin();
-        rider.draw(batch);
-        opponent.draw(batch);
+        player.draw(batch);
+        opponents.forEach(o -> o.draw(batch));
         batch.end();
 
         // --- 2. Rendu du HUD (texte, UI) ---
@@ -122,8 +127,61 @@ public class GameScreen implements Screen {
     }
 
     private void input() {
-        PlayerRiderHandler.handle(rider);
-        PlayerRiderHandler.handleCollision(rider, opponent);
+
+        PlayerRiderHandler.handle(player);
+        opponents.forEach(o -> {
+            OpponentRiderHandler.handle(o);
+            PlayerRiderHandler.handleCollision(player, o);
+        });
+    }
+
+    private void initPlayer(){
+        player = new Rider(new RiderData(100, 100, "riders/rider.png"));
+    }
+
+    private void spawnRider(){
+        ZoneMatrice zoneDepart = new ZoneMatrice(10f, 10f, 10f, 10f);
+        Cell firstCell = zoneDepart.getFirstEmptyCell();
+        player.getSprite().setCenter(firstCell.getX(), firstCell.getY());
+        var nextCell = zoneDepart.getNextCell(firstCell);
+        for(Rider r : opponents){
+            r.getSprite().setCenter(nextCell.getX(), nextCell.getY());
+            nextCell = zoneDepart.getNextCell(nextCell);
+        }
+    }
+
+    private void initOpponent(){
+        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
+        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
+        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
+        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
+        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
+        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
+        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
+        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
+        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
+        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
+        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
+        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
+        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
+        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
+        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
+        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
+        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
+        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
+        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
+        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
+        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
+        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
+        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
+        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
+        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
+        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
+        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
+        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
+        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
+
+
     }
 
 

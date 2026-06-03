@@ -6,5 +6,7 @@ public class ScreenConstant {
     public static final int WIDTH_VIEW = 8;
 
     public static final float BOTTOM_OFFSET = 5;
+    public static final float RIDER_WIDTH = 1;
+    public static final float RIDER_HEIGHT = 2;
 
 }

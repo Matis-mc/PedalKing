@@ -49,7 +49,7 @@ public class Rider {
 
     public float sprint(float speed){
         if(riderData.endurance <=0) return speed;
-        riderData.endurance -= 1;
+        //riderData.endurance -= 1;   todo : sprint illimité pour tester
         return speed * 2;
     }
 
