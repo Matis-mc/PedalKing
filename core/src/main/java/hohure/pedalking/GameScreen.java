@@ -128,7 +128,8 @@ public class GameScreen implements Screen {
 
     private void input() {
 
-        PlayerRiderHandler.handle(player);
+        float coef = backgroundMap.interactWithMap((int)player.getSprite().getX(), (int)player.getSprite().getY());
+        PlayerRiderHandler.handle(player, coef);
         opponents.forEach(o -> {
             OpponentRiderHandler.handle(o);
             PlayerRiderHandler.handleCollision(player, o);

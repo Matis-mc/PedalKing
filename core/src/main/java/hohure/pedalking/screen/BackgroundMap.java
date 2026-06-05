@@ -1,26 +1,23 @@
 package hohure.pedalking.screen;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.SpriteCache;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import hohure.pedalking.debogging.OrthoCamController;
-import hohure.pedalking.utils.constant.ScreenConstant;
+
+import java.util.Optional;
 
 public class BackgroundMap {
 
     private float speed;
     TiledMap tiledMap;
     TiledMapRenderer renderer;
+    TiledMapTileLayer groundLayer;
 
     // Le Viewport gère la caméra en interne
     private ExtendViewport viewport;
@@ -34,6 +31,7 @@ public class BackgroundMap {
         viewport = new ExtendViewport(WORLD_WIDTH, WORLD_HEIGHT);
         tiledMap = new TmxMapLoader().load("maps/map.tmx");
         renderer = new OrthogonalTiledMapRenderer(tiledMap, 1f/ 32f);
+        groundLayer = (TiledMapTileLayer) tiledMap.getLayers().get(0);
 
     }
     public void setSpeed(float speed)
@@ -78,6 +76,12 @@ public class BackgroundMap {
             sprite.getX() + sprite.getWidth() / 2f,  // centre X du sprite
             sprite.getY() + sprite.getHeight() / 2f  // centre Y du sprite
         );
+    }
+
+    public float interactWithMap(int x, int y){
+        return Optional.ofNullable(groundLayer.getCell(x, y).getTile().getProperties().get("roul"))
+            .map( r -> (float) r)
+            .orElse(1f);
     }
 
 

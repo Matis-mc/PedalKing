@@ -2,8 +2,28 @@
 <map version="1.10" tiledversion="1.12.2-2-geb83ddb9" orientation="orthogonal" renderorder="right-down" width="48" height="608" tilewidth="32" tileheight="32" infinite="0" nextlayerid="3" nextobjectid="1">
  <tileset firstgid="1" name="tileset" tilewidth="32" tileheight="32" tilecount="1288" columns="56">
   <image source="tileset.png" width="1792" height="736"/>
+  <tile id="113">
+     <properties>
+      <property name="roul" type="float" value="0.5"/>
+     </properties>
+    </tile>
+    <tile id="673">
+     <properties>
+      <property name="roul" type="float" value="1"/>
+     </properties>
+    </tile>
+    <tile id="519">
+     <properties>
+      <property name="roul" type="float" value="1.1"/>
+     </properties>
+    </tile>
+        <tile id="243">
+         <properties>
+          <property name="roul" type="float" value="0.7"/>
+         </properties>
+        </tile>
  </tileset>
- <layer id="1" name="Calque de Tuiles 1" width="48" height="608">
+ <layer id="1" name="ground" width="48" height="608">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
