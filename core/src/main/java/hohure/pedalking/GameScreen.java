@@ -5,22 +5,11 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import hohure.pedalking.artefacts.race.matrice.Cell;
-import hohure.pedalking.artefacts.race.matrice.ZoneMatrice;
-import hohure.pedalking.artefacts.riders.OpponentRiderHandler;
-import hohure.pedalking.artefacts.riders.Rider;
-import hohure.pedalking.artefacts.riders.PlayerRiderHandler;
-import hohure.pedalking.artefacts.riders.RiderData;
+import hohure.pedalking.managers.RiderManager;
 import hohure.pedalking.screen.BackgroundMap;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static hohure.pedalking.utils.constant.ScreenConstant.BOTTOM_OFFSET;
 
 
 /** First screen of the application. Displayed after the application is created. */
@@ -30,9 +19,7 @@ public class GameScreen implements Screen {
     BitmapFont font;
     SpriteBatch batch;
     BackgroundMap backgroundMap;
-    Rider player;
-    List<Rider> opponents = new ArrayList<>();
-
+    RiderManager riderManager;
     // HUD
     // Caméra et viewport dédiés au HUD (texte, UI)
     private ScreenViewport hudViewport;
@@ -40,27 +27,25 @@ public class GameScreen implements Screen {
 
     public GameScreen(){
         batch = new SpriteBatch();
-        backgroundMap = new BackgroundMap();
+        backgroundMap = BackgroundMap.getInstance();
         hudViewport = new ScreenViewport();
         font = new BitmapFont();
-        initPlayer();
-        initOpponent();
+        riderManager = new RiderManager();
+
+        riderManager.generate();
         setUpFont();
 
     }
 
     @Override
     public void show() {
-        MapProperties props = backgroundMap.getTiledMap().getProperties();
-        float mapCenterX = props.get("width", Integer.class) / 2f;
-        float mapBottomY = BOTTOM_OFFSET;
-        spawnRider();
+        riderManager.show();
 
     }
 
     @Override
     public void render(float delta) {
-        input();
+        riderManager.update();
         draw();
     }
 
@@ -95,8 +80,7 @@ public class GameScreen implements Screen {
         // Destroy screen's assets here.
         font.dispose();
         tiledMap.dispose();
-        player.dispose();
-        opponents.forEach(o -> o.dispose());
+        riderManager.dispose();
         backgroundMap.dispose();
     }
 
@@ -108,13 +92,12 @@ public class GameScreen implements Screen {
     public void draw(){
         // Draw your screen here. "delta" is the time since last render in seconds.
         ScreenUtils.clear(Color.BLACK);
-        backgroundMap.updateCameraOnSprite(player.getSprite());
+        backgroundMap.updateCameraOnSprite(riderManager.getPlayerSprite());
         backgroundMap.render();
 
         batch.setProjectionMatrix(backgroundMap.getViewport().getCamera().combined);
         batch.begin();
-        player.draw(batch);
-        opponents.forEach(o -> o.draw(batch));
+        riderManager.draw(batch);
         batch.end();
 
         // --- 2. Rendu du HUD (texte, UI) ---
@@ -124,65 +107,6 @@ public class GameScreen implements Screen {
         batch.begin();
         font.draw(batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 10, 20);
         batch.end();
-    }
-
-    private void input() {
-
-        float coef = backgroundMap.interactWithMap((int)player.getSprite().getX(), (int)player.getSprite().getY());
-        PlayerRiderHandler.handle(player, coef);
-        opponents.forEach(o -> {
-            OpponentRiderHandler.handle(o);
-            PlayerRiderHandler.handleCollision(player, o);
-        });
-    }
-
-    private void initPlayer(){
-        player = new Rider(new RiderData(100, 100, "riders/rider.png"));
-    }
-
-    private void spawnRider(){
-        ZoneMatrice zoneDepart = new ZoneMatrice(10f, 10f, 10f, 10f);
-        Cell firstCell = zoneDepart.getFirstEmptyCell();
-        player.getSprite().setCenter(firstCell.getX(), firstCell.getY());
-        var nextCell = zoneDepart.getNextCell(firstCell);
-        for(Rider r : opponents){
-            r.getSprite().setCenter(nextCell.getX(), nextCell.getY());
-            nextCell = zoneDepart.getNextCell(nextCell);
-        }
-    }
-
-    private void initOpponent(){
-        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
-        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
-        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
-        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
-        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
-        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
-        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
-        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
-        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
-        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
-        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
-        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
-        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
-        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
-        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
-        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
-        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
-        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
-        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
-        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
-        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
-        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
-        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
-        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
-        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
-        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
-        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
-        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
-        opponents.add(new Rider(new RiderData(100, 100, "riders/decathlon-rider.png")));
-
-
     }
 
 

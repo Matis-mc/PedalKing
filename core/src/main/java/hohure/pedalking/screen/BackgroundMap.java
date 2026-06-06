@@ -14,6 +14,8 @@ import java.util.Optional;
 
 public class BackgroundMap {
 
+    private static BackgroundMap instance;
+
     private float speed;
     TiledMap tiledMap;
     TiledMapRenderer renderer;
@@ -26,7 +28,14 @@ public class BackgroundMap {
     private static final float WORLD_WIDTH = 17f;
     private static final float WORLD_HEIGHT = 13f;
 
-    public BackgroundMap(){
+    public static BackgroundMap getInstance(){
+        if(instance == null){
+            instance = new BackgroundMap();
+        }
+        return instance;
+    }
+
+    private BackgroundMap(){
 
         viewport = new ExtendViewport(WORLD_WIDTH, WORLD_HEIGHT);
         tiledMap = new TmxMapLoader().load("maps/map.tmx");

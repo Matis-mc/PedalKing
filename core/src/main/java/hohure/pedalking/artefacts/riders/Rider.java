@@ -5,16 +5,19 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import hohure.pedalking.enums.Direction;
+import hohure.pedalking.enums.RiderType;
 
 public class Rider {
 
     // rider
+    private RiderType type;
     private Texture riderTexture;
     private Sprite riderSprite;
     private Rectangle rectangle;
     private RiderData riderData;
 
-    public Rider(RiderData riderData){
+    public Rider(RiderType type, RiderData riderData){
+        this.type = type;
         this.riderData = riderData;
         riderTexture = new Texture(riderData.getTexture());
         riderSprite = new Sprite(riderTexture);
@@ -60,6 +63,10 @@ public class Rider {
 
     public RiderData getRiderData(){
         return riderData;
+    }
+
+    public RiderType getType(){
+        return type;
     }
 
 }
