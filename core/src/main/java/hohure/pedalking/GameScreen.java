@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -23,6 +24,7 @@ public class GameScreen implements Screen {
     // HUD
     // Caméra et viewport dédiés au HUD (texte, UI)
     private ScreenViewport hudViewport;
+    ShapeRenderer shapeRenderer;
 
 
     public GameScreen(){
@@ -31,6 +33,8 @@ public class GameScreen implements Screen {
         hudViewport = new ScreenViewport();
         font = new BitmapFont();
         riderManager = new RiderManager();
+
+        shapeRenderer = new ShapeRenderer();
 
         riderManager.generate();
         setUpFont();
@@ -90,8 +94,13 @@ public class GameScreen implements Screen {
     }
 
     public void draw(){
-        // Draw your screen here. "delta" is the time since last render in seconds.
         ScreenUtils.clear(Color.BLACK);
+        drawGameScene();
+        drawhHUD();
+
+    }
+
+    private void drawGameScene() {
         backgroundMap.updateCameraOnSprite(riderManager.getPlayerSprite());
         backgroundMap.render();
 
@@ -100,14 +109,21 @@ public class GameScreen implements Screen {
         riderManager.draw(batch);
         batch.end();
 
-        // --- 2. Rendu du HUD (texte, UI) ---
-        // On change de viewport : maintenant on travaille en pixels
+        shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        riderManager.drawShape(shapeRenderer);
+        shapeRenderer.end();
+    }
+
+    private void drawhHUD(){
         hudViewport.apply();
         batch.setProjectionMatrix(hudViewport.getCamera().combined);
         batch.begin();
         font.draw(batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 10, 20);
+        font.draw(batch, "Player endurance: " + riderManager.getPlayer().getRiderData().getEndurance(), 10, 40);
+        font.draw(batch, "Player vitesse: " + Math.round(riderManager.getPlayer().getRiderSpeed().getCurrentSpeed()*500) + "km/h", 10, 60);
+
         batch.end();
     }
-
 
 }

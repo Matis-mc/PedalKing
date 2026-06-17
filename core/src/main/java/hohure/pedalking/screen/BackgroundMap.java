@@ -90,6 +90,7 @@ public class BackgroundMap {
     public float interactWithMap(int x, int y){
         return Optional.ofNullable(groundLayer.getCell(x, y).getTile().getProperties().get("roul"))
             .map( r -> (float) r)
+            .filter(r -> r > 0f)
             .orElse(1f);
     }
 

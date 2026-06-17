@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import hohure.pedalking.enums.Direction;
+import hohure.pedalking.enums.RiderEffort;
 import hohure.pedalking.enums.RiderType;
 
 public class Rider {
@@ -15,12 +16,15 @@ public class Rider {
     private Sprite riderSprite;
     private Rectangle rectangle;
     private RiderData riderData;
+    private RiderSpeed riderSpeed;
 
     public Rider(RiderType type, RiderData riderData){
         this.type = type;
         this.riderData = riderData;
-        riderTexture = new Texture(riderData.getTexture());
+        riderTexture = new Texture(riderData.getTexturePath());
+        riderSpeed = new RiderSpeed();
         riderSprite = new Sprite(riderTexture);
+
         float riderWitdh = (riderTexture.getWidth() / 32f) / 2;
         float riderHeight = (riderTexture.getHeight() / 32f) / 2;
         riderSprite.setSize(riderWitdh, riderHeight);
@@ -39,30 +43,45 @@ public class Rider {
         riderTexture.dispose();
     }
 
-    public void move(Direction direction, float speed){
+    public void updateSpeed(RiderEffort riderEffort, float delta){
+        this.riderSpeed.update(riderEffort, delta);
+    }
+
+    public void updateEnvironnmentFactor(float factor){
+        this.riderSpeed.setEnvironmentFactor(factor);
+    }
+
+    public void move(Direction direction){
         riderData.setDirection(direction);
-        riderData.setSpeed(speed);
+        var distance = riderSpeed.getCurrentSpeed();
         switch (direction){
-            case UP -> riderSprite.translateY(speed);
-            case DOWN -> riderSprite.translateY(-speed);
-            case RIGHT -> riderSprite.translateX(speed);
-            case LEFT -> riderSprite.translateX(-speed);
+            case UP,DOWN -> riderSprite.translateY(distance); // on freine = on avance vers le haut moins vite
+            case RIGHT -> riderSprite.translateX(distance);
+            case LEFT -> riderSprite.translateX(-distance);
         }
     }
 
-    public float sprint(float speed){
-        if(riderData.endurance <=0) return speed;
-        //riderData.endurance -= 1;   todo : sprint illimité pour tester
-        return speed * 2;
+    public void moveAfterCollision(Direction direction){
+        // on gère le déplacement suite à un choc en une frame, sans vitesse prise en compte
+        switch (direction){
+            case UP -> riderSprite.translateY(0.2f);
+            case DOWN -> riderSprite.translateY(-0.2f);
+            case RIGHT -> riderSprite.translateX(0.2f);
+            case LEFT -> riderSprite.translateX(-0.2f);
+        }
     }
 
     public Rectangle getRectangle(){
-        rectangle.set(riderSprite.getX(), riderSprite.getY(), riderSprite.getWidth(), riderSprite.getHeight());
+        rectangle.set(riderSprite.getX()+0.1f, riderSprite.getY()+0.3f, riderSprite.getWidth()-0.2f, riderSprite.getHeight()-0.5f);
         return rectangle;
     }
 
     public RiderData getRiderData(){
         return riderData;
+    }
+
+    public RiderSpeed getRiderSpeed() {
+        return riderSpeed;
     }
 
     public RiderType getType(){

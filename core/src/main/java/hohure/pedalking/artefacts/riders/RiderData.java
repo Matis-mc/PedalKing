@@ -6,17 +6,15 @@ public class RiderData {
 
     int endurance;
     int power;
-    float speed;
     Direction direction;
-    String texture;
+    String texturePath;
 
-    public RiderData(int endurance, int power, String texture){
+    public RiderData(int endurance, int power, String texturePath){
         this.endurance = endurance;
         this.power = power;
-        this.texture = texture;
+        this.texturePath = texturePath;
         this.direction = Direction.UP;
     }
-
 
     public int getEndurance() {
         return endurance;
@@ -34,20 +32,12 @@ public class RiderData {
         this.power = power;
     }
 
-    public String getTexture() {
-        return texture;
+    public String getTexturePath() {
+        return texturePath;
     }
 
-    public void setTexture(String texture) {
-        this.texture = texture;
-    }
-
-    public float getSpeed() {
-        return speed;
-    }
-
-    public void setSpeed(float speed) {
-        this.speed = speed;
+    public void setTexturePath(String texturePath) {
+        this.texturePath = texturePath;
     }
 
     public Direction getDirection() {
@@ -57,4 +47,5 @@ public class RiderData {
     public void setDirection(Direction direction) {
         this.direction = direction;
     }
+
 }

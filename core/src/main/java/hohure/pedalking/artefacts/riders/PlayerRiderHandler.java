@@ -2,60 +2,48 @@ package hohure.pedalking.artefacts.riders;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import hohure.pedalking.enums.CollisionZone;
 import hohure.pedalking.enums.Direction;
+
+import static hohure.pedalking.enums.RiderEffort.*;
 
 public class PlayerRiderHandler {
 
     private PlayerRiderHandler(){};
 
     public static void handle(Rider rider, float groundCoef){
-        float speed = 4f * Gdx.graphics.getDeltaTime() * groundCoef;
+
+        var riderEffort = FREE_WHEEL;
+        rider.updateEnvironnmentFactor(groundCoef);
+
+        if(Gdx.graphics.getDeltaTime() == 0) return; // à l'initialisation, pour la première frame, cette valeur vaut 0 et casse tout le mécanisme de vitesse si elle est prise en compte
 
         if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
-            speed = rider.sprint(speed);
+            riderEffort = SPRINT;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            rider.move(Direction.RIGHT, speed);
+            if(riderEffort!=SPRINT) riderEffort = PEDAL;
+            rider.updateSpeed(riderEffort, Gdx.graphics.getDeltaTime());
+            rider.move(Direction.RIGHT);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            rider.move(Direction.LEFT, speed);
+            if(riderEffort!=SPRINT) riderEffort = PEDAL;
+            rider.updateSpeed(riderEffort, Gdx.graphics.getDeltaTime());
+            rider.move(Direction.LEFT);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            rider.move(Direction.UP, speed);
+            if(riderEffort!=SPRINT) riderEffort = PEDAL;
+            rider.updateSpeed(riderEffort, Gdx.graphics.getDeltaTime());
+            rider.move(Direction.UP);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            rider.move(Direction.DOWN, speed);
+            riderEffort = BRAKE;
+            rider.updateSpeed(riderEffort, Gdx.graphics.getDeltaTime());
+            rider.move(Direction.DOWN);
         }
-    }
 
-    public static void handleCollision(Rider riderA, Rider riderB){
-        if(riderA.getRectangle().overlaps(riderB.getRectangle())){
-            switch (getContactZone(riderA, riderB)){
-                case TOP -> riderB.move(Direction.DOWN, riderA.getRiderData().getSpeed());
-                case BOTTOM -> riderA.move(Direction.DOWN, riderA.getRiderData().getSpeed());
-                case CENTER -> {
-                    Direction directionChoc = riderA.getRiderData().getDirection();
-                    riderB.move(directionChoc, riderA.getRiderData().getSpeed()/2);
-                    riderA.move(directionChoc.opposite(), riderA.getRiderData().getSpeed()/2);
-                }
-            }
-        }
-    }
-
-    private static CollisionZone getContactZone(Rider self, Rider other) {
-
-        var ySelf = self.getRectangle().getY();
-        var yOther = other.getRectangle().getY();
-        var riderHeight = self.getRectangle().getHeight();
-
-        if(ySelf > yOther){
-            if((ySelf - yOther) > riderHeight/4) return CollisionZone.TOP;
-            return CollisionZone.CENTER;
-        }
-        else {
-            if((yOther - ySelf) > riderHeight/4) return CollisionZone.BOTTOM;
-            return CollisionZone.CENTER;
+        if(riderEffort == FREE_WHEEL) { // aucune touche n'a été enregistré
+            rider.updateSpeed(FREE_WHEEL, Gdx.graphics.getDeltaTime());
+            rider.move(Direction.UP);
         }
     }
 

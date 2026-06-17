@@ -2,12 +2,10 @@ package hohure.pedalking.managers;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import hohure.pedalking.artefacts.race.matrice.Cell;
 import hohure.pedalking.artefacts.race.matrice.ZoneMatrice;
-import hohure.pedalking.artefacts.riders.OpponentRiderHandler;
-import hohure.pedalking.artefacts.riders.PlayerRiderHandler;
-import hohure.pedalking.artefacts.riders.Rider;
-import hohure.pedalking.artefacts.riders.RiderData;
+import hohure.pedalking.artefacts.riders.*;
 import hohure.pedalking.screen.BackgroundMap;
 
 import java.util.ArrayList;
@@ -15,6 +13,7 @@ import java.util.List;
 
 import static hohure.pedalking.enums.RiderType.IA;
 import static hohure.pedalking.enums.RiderType.PLAYER;
+import static hohure.pedalking.utils.constant.GameConstant.NB_OPPONENT;
 
 public class RiderManager {
 
@@ -34,7 +33,7 @@ public class RiderManager {
         riders.add(player);
 
         // IA
-        for(int i =0; i <25; i++){
+        for(int i =0; i < NB_OPPONENT; i++){
             riders.add(new Rider(IA, new RiderData(100, 100, "riders/decathlon-rider.png")));
         }
 
@@ -45,7 +44,7 @@ public class RiderManager {
     }
 
     public void show(){
-        ZoneMatrice zoneDepart = new ZoneMatrice(10f, 10f, 10f, 10f);
+        ZoneMatrice zoneDepart = new ZoneMatrice(10f, 10f, 15f, 10f);
         Cell cell = zoneDepart.getFirstEmptyCell();
         for(Rider r : riders){
             r.getSprite().setCenter(cell.getX(), cell.getY());
@@ -65,7 +64,7 @@ public class RiderManager {
             }
             for (Rider o2 : riders){
                 if(o1 != o2){
-                    PlayerRiderHandler.handleCollision(o1, o2);
+                    CollisionRiderHandler.handleCollision(o1, o2);
                 }
             }
         }
@@ -75,10 +74,22 @@ public class RiderManager {
         riders.forEach(o -> o.draw(batch));
     }
 
+    public void drawShape(ShapeRenderer renderer){
+        riders.forEach(o ->
+        {
+            var rect = o.getRectangle();
+            renderer.rect(rect.getX(), rect.getY(), rect.getWidth(), rect.getHeight());
+        });
+    }
+
     public void dispose() {
         riders.forEach(
             Rider::dispose
         );
+    }
+
+    public Rider getPlayer(){
+        return this.player;
     }
 
     public Sprite getPlayerSprite(){
