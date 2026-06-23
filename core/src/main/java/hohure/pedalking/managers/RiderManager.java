@@ -9,6 +9,7 @@ import hohure.pedalking.artefacts.riders.*;
 import hohure.pedalking.screen.BackgroundMap;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import static hohure.pedalking.enums.RiderType.IA;
@@ -68,6 +69,7 @@ public class RiderManager {
                 }
             }
         }
+        riders = riders.stream().sorted(Comparator.comparing(Rider::getYPosition).reversed()).toList();
     }
 
     public void draw(SpriteBatch batch){
@@ -90,6 +92,10 @@ public class RiderManager {
 
     public Rider getPlayer(){
         return this.player;
+    }
+
+    public int getRankRider(Rider r){
+        return this.riders.indexOf(r) + 1;
     }
 
     public Sprite getPlayerSprite(){

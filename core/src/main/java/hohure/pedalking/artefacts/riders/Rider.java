@@ -88,4 +88,8 @@ public class Rider {
         return type;
     }
 
+    public float getYPosition(){
+        return this.riderSprite.getY();
+    }
+
 }

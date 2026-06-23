@@ -121,7 +121,8 @@ public class GameScreen implements Screen {
         batch.begin();
         font.draw(batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 10, 20);
         font.draw(batch, "Player endurance: " + riderManager.getPlayer().getRiderData().getEndurance(), 10, 40);
-        font.draw(batch, "Player vitesse: " + Math.round(riderManager.getPlayer().getRiderSpeed().getCurrentSpeed()*500) + "km/h", 10, 60);
+        font.draw(batch, "Vitesse: " + Math.round(riderManager.getPlayer().getRiderSpeed().getCurrentSpeed()*500) + "km/h", 10, 60);
+        font.draw(batch, "Position: " + riderManager.getRankRider(riderManager.getPlayer()), 10, 80);
 
         batch.end();
     }
