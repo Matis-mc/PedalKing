@@ -8,6 +8,8 @@ public class RiderSpeed {
     // todo : ces données devront être propre à chaque rider;
     private float currentSpeed = 0f;
     private float maxSpeed = 5f;
+    private float maxSpeedTheoric = 5f;
+    private float maxSprintSpeedTheoric = 10f;
     private float maxSprintSpeed = 10f;
     private float acceleration = 2f;
     private float deceleration = 2f;
@@ -16,7 +18,6 @@ public class RiderSpeed {
     private float environmentFactor = 1f;
 
     public void update(RiderEffort riderEffort, float delta){
-
         switch (riderEffort){
             case BRAKE -> {
                 currentSpeed -= deceleration * brakeFactor * delta;
@@ -35,7 +36,6 @@ public class RiderSpeed {
                 currentSpeed  = Math.min(currentSpeed, maxSprintSpeed);
             }
         }
-        //currentSpeed = currentSpeed * environmentFactor;
     }
 
     public float getCurrentSpeed() {
@@ -44,5 +44,7 @@ public class RiderSpeed {
 
     public void setEnvironmentFactor(float environmentFactor) {
         this.environmentFactor = environmentFactor;
+        maxSpeed = maxSpeedTheoric * environmentFactor;
+        maxSprintSpeed = maxSprintSpeedTheoric * environmentFactor;
     }
 }
