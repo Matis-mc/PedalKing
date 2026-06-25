@@ -44,7 +44,7 @@ public class RiderSpeed {
 
     public void setEnvironmentFactor(float environmentFactor) {
         this.environmentFactor = environmentFactor;
-        maxSpeed = maxSpeedTheoric * environmentFactor;
-        maxSprintSpeed = maxSprintSpeedTheoric * environmentFactor;
+        maxSpeed = maxSpeedTheoric * this.environmentFactor;
+        maxSprintSpeed = maxSprintSpeedTheoric * this.environmentFactor;
     }
 }

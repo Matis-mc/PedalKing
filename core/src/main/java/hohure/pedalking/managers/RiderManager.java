@@ -11,10 +11,12 @@ import hohure.pedalking.screen.BackgroundMap;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 import static hohure.pedalking.enums.RiderType.IA;
 import static hohure.pedalking.enums.RiderType.PLAYER;
 import static hohure.pedalking.utils.constant.GameConstant.NB_OPPONENT;
+import static hohure.pedalking.utils.race.PelotonUtils.findClosestFrontRider;
 
 public class RiderManager {
 
@@ -61,7 +63,8 @@ public class RiderManager {
         for (Rider o1 : riders){
             if(IA.equals(o1.getType())) {
                 coef = backgroundMap.interactWithMap((int)o1.getSprite().getX(), (int)o1.getSprite().getY());
-                OpponentRiderHandler.handle(o1, coef);
+                Optional<Rider> maybeTarget = findClosestFrontRider(o1, riders);
+                OpponentRiderHandler.handle(o1, coef, maybeTarget);
             }
             for (Rider o2 : riders){
                 if(o1 != o2){
