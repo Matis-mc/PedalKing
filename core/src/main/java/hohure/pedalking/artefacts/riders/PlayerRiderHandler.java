@@ -22,28 +22,23 @@ public class PlayerRiderHandler {
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             if(riderEffort!=SPRINT) riderEffort = PEDAL;
-            rider.updateSpeed(riderEffort, Gdx.graphics.getDeltaTime());
-            rider.move(Direction.RIGHT);
+            rider.ride(riderEffort, Direction.RIGHT);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             if(riderEffort!=SPRINT) riderEffort = PEDAL;
-            rider.updateSpeed(riderEffort, Gdx.graphics.getDeltaTime());
-            rider.move(Direction.LEFT);
+            rider.ride(riderEffort, Direction.LEFT);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
             if(riderEffort!=SPRINT) riderEffort = PEDAL;
-            rider.updateSpeed(riderEffort, Gdx.graphics.getDeltaTime());
-            rider.move(Direction.UP);
+            rider.ride(riderEffort, Direction.UP);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
             riderEffort = BRAKE;
-            rider.updateSpeed(riderEffort, Gdx.graphics.getDeltaTime());
-            rider.move(Direction.DOWN);
+            rider.ride(riderEffort, Direction.DOWN);
         }
 
         if(riderEffort == FREE_WHEEL) { // aucune touche n'a été enregistré
-            rider.updateSpeed(FREE_WHEEL, Gdx.graphics.getDeltaTime());
-            rider.move(Direction.UP);
+            rider.ride(riderEffort, Direction.UP);
         }
     }
 

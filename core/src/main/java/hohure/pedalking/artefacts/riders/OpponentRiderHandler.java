@@ -12,11 +12,10 @@ public class OpponentRiderHandler {
 
     public static void handle(Rider opponent, float groundCoef, Optional<Rider> maybeTarget){
         opponent.updateEnvironnmentFactor(groundCoef);
-        opponent.updateSpeed(RiderEffort.PEDAL, Gdx.graphics.getDeltaTime());
         if(maybeTarget.isPresent()){
             followRider(opponent, maybeTarget.get());
         } else {
-            opponent.move(Direction.UP);
+            opponent.ride(RiderEffort.PEDAL, Direction.UP);
         }
     }
 }

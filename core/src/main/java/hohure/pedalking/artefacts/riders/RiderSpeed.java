@@ -17,7 +17,8 @@ public class RiderSpeed {
     private float sprintFactor = 5f;
     private float environmentFactor = 1f;
 
-    public void update(RiderEffort riderEffort, float delta){
+    public void update(RiderEffort riderEffort){
+        float delta = Gdx.graphics.getDeltaTime();
         switch (riderEffort){
             case BRAKE -> {
                 currentSpeed -= deceleration * brakeFactor * delta;

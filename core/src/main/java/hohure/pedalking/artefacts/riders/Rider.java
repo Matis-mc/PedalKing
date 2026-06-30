@@ -43,15 +43,19 @@ public class Rider {
         riderTexture.dispose();
     }
 
-    public void updateSpeed(RiderEffort riderEffort, float delta){
-        this.riderSpeed.update(riderEffort, delta);
-    }
-
     public void updateEnvironnmentFactor(float factor){
         this.riderSpeed.setEnvironmentFactor(factor);
     }
 
-    public void move(Direction direction){
+    public void ride(RiderEffort riderEffort, Direction direction){
+        this.riderData.updateEndurance(riderEffort);
+        this.riderSpeed.update(riderEffort);
+        move(direction);
+    }
+
+
+
+    private void move(Direction direction){
         riderData.setDirection(direction);
         var distance = riderSpeed.getCurrentSpeed();
         switch (direction){
@@ -72,7 +76,7 @@ public class Rider {
     }
 
     public Rectangle getRectangle(){
-        rectangle.set(riderSprite.getX()+0.1f, riderSprite.getY()+0.3f, riderSprite.getWidth()-0.2f, riderSprite.getHeight()-0.5f);
+        rectangle.set(riderSprite.getX()+0.2f, riderSprite.getY()+0.3f, riderSprite.getWidth()-0.3f, riderSprite.getHeight()-0.5f);
         return rectangle;
     }
 

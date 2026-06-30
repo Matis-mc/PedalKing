@@ -3,6 +3,7 @@ package hohure.pedalking.utils.race;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import hohure.pedalking.artefacts.riders.Rider;
 import hohure.pedalking.enums.Direction;
+import hohure.pedalking.enums.RiderEffort;
 
 import static hohure.pedalking.utils.race.PelotonUtils.getDistanceOnYBetweenRider;
 
@@ -11,12 +12,12 @@ public class IAUtils {
     public static void followRider(Rider subject, Rider target){
         if (isRidersCloseEnought(subject, target)) {
             if (targetIsOnTheRight(subject.getSprite(), target.getSprite())) {
-                subject.move(Direction.RIGHT);
+                subject.ride(RiderEffort.PEDAL, Direction.RIGHT);
             } else if (targetIsOnTheLeft(subject.getSprite(), target.getSprite())) {
-                subject.move(Direction.LEFT);
+                subject.ride(RiderEffort.PEDAL, Direction.LEFT);
             }
         }
-        subject.move(Direction.UP);
+        subject.ride(RiderEffort.PEDAL, Direction.UP);
     }
 
     private static boolean isRidersCloseEnought(Rider subject, Rider target){
